@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//232.用栈实现队列
 class MyQueue {
 private:
 deque<int> dq;

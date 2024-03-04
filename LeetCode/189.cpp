@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 
+//189轮转数组
 class Solution {
 public:
     static int gcd(int a, int b)
