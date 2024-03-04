@@ -9,8 +9,30 @@ using namespace std;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int min_price = prices[0];
+        int min_price = INT_MAX;
         int max_profit = 0;
+        int local_max_profit = 0;
+        for (int i = 0; i < prices.size(); i++) {
+            if (prices[i] < min_price)
+            {
+                min_price = prices[i];
+            }
+            else if (prices[i] - min_price > local_max_profit)
+            {
+                local_max_profit = prices[i] - min_price;
+            }
+            
+            if(i >0 && prices[i] < prices[i-1]){
+                max_profit+=local_max_profit;
+                local_max_profit = 0;
+                min_price = prices[i];
+            }
+            else if (i == prices.size()-1)
+            {
+                local_max_profit = prices[i] - min_price;
+                max_profit+=local_max_profit;
+            }
+        }
         
         return max_profit;
     }
@@ -22,7 +44,7 @@ public:
 int main()
 {
 Solution sul;
-vector<int> prices = {2,100,1,5,6,4,3};
+vector<int> prices = {1,2,3,4,5};
 printf("%d",sul.maxProfit(prices));
 return 0;
 }
