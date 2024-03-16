@@ -7,7 +7,7 @@
 using namespace std;
 
 
-//2024-03-13 : 14:43:22
+//2024-03-14 : 09:28:03
 
 class Timer
 {
@@ -21,7 +21,7 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
 };
 
-//19.删除链表的倒数第 N 个结点
+//24.两两交换链表中的节点
 /**
  * Definition for singly-linked list.
  */
@@ -43,38 +43,30 @@ struct ListNode {
 };
 class Solution {
 public:
-    int countDown(ListNode* head, int n)
-    {
-        if(head->next ==nullptr)
-            return 1;
-        int res = countDown(head->next,n);
-
-        if(res == -1)
-            return -1;
-
-        if(res == n)
-        {
-            head->next = head->next->next;
-            return -1;
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* next,*res,*cur;
+        ListNode* prev = new ListNode(-1,head);
+        if(head == nullptr || head->next == nullptr) return head;
+        cur = head;
+        next = head->next;
+        res = next;
+        while(true){
+            cur->next = next->next;
+            next->next = cur;
+            prev->next = next;
+            prev = cur;
+            if(cur->next == nullptr || cur->next->next == nullptr) break;
+            cur = cur->next;
+            next = cur->next;
         }
-        return res +1;
-    }
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* pHead = new ListNode(-1,head);
-
-        int res = countDown(pHead,n);
-        if(res == 1){
-            ListNode* p =nullptr;
-            return p;
-        }
-        return pHead->next;
+        return res;
     }
 };
 
 int main()
 {
     Solution sul;
-    ListNode* head = new ListNode({1,2,3,4,5});
-    auto res = sul.removeNthFromEnd(head,2);
+    ListNode* head = new ListNode({1,2,3,4});
+    auto res = sul.swapPairs(head);
     return 0;
 }
