@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <unordered_map>
 
 using namespace std;
 
@@ -38,29 +39,48 @@ public:
     }
     Node(int _val, Node* r) {
         val = _val;
-        next = NULL;
-        random = r;
+        next = r;
+        random = NULL;
     }
     Node(const vector<vector<int>>& v)
     {
         if(v.empty()) return;
         this->val = v[0][0];
         Node *p = this;
+        Node* q[v.size()];
+        q[0] = p;
         for(int i = 1; i < v.size(); ++i){
-            p->random = 
             p->next = new Node(v[i][0]);
-
             p = p->next;
+            q[i] = p;
+        }
+        for(int i = 0; i < v.size(); ++i)
+        {
+            if(v[i][1] == NULL)
+                q[i]->random = nullptr;
+            else
+                q[i]->random = q[v[i][1]];
         }
     }
 };
 
-class Solution {
-public:
-    Node* copyRandomList(Node* head) {
-        
-    }
-};
+    class Solution {
+    public:
+        unordered_map<Node*, Node*> cachedNode;
+
+        Node* copyRandomList(Node* head) {
+            if (head == nullptr) {
+                return nullptr;
+            }
+            if (!cachedNode.count(head)) {
+                Node* headNew = new Node(head->val);
+                cachedNode[head] = headNew;
+                headNew->next = copyRandomList(head->next);
+                headNew->random = copyRandomList(head->random);
+            }
+            return cachedNode[head];
+        }
+    };
 
 int main()
 {
